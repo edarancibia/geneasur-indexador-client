@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import FormInput from './FormInput'; // Asegúrate de que este componente esté creado correctamente
+import React, { useState } from "react";
+import FormInput from "./FormInput"; // Asegúrate de que este componente esté creado correctamente
+import { Link, useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -22,24 +24,37 @@ const Login: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.access_token;
-        localStorage.setItem('token', token);
-        // Redirigir o mostrar mensaje de éxito
+        localStorage.setItem("token", token);
+
+        navigate("/cemeteries", { replace: true });
       } else {
-        setError('Credenciales inválidas');
+        setError("Credenciales inválidas");
       }
     } catch (err) {
-      setError('Hubo un error, inténtalo de nuevo');
+      setError("Hubo un error, inténtalo de nuevo");
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary via-green-300 to-green-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">Iniciar Sesión</h2>
+        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+          Iniciar Sesión
+        </h2>
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <FormInput label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <FormInput label="Contraseña" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <FormInput
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <FormInput
+            label="Contraseña"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <div>
             <button
               type="submit"
@@ -47,6 +62,14 @@ const Login: React.FC = () => {
             >
               Iniciar Sesión
             </button>
+            <div className="text-center mt-4">
+              <Link
+                to="/user-register"
+                className="text-primary hover:text-green-700 transition-all duration-200"
+              >
+                Crear cuenta
+              </Link>
+            </div>
           </div>
         </form>
       </div>

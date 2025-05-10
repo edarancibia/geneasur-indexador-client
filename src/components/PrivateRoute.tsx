@@ -12,12 +12,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (!auth?.isAuthenticated) {
-      navigate('/login');
+      navigate('/');
     }
   }, [auth, navigate]);
 
   if (!auth || !auth.isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return <>{children}</>;

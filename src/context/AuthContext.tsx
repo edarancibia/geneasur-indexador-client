@@ -17,7 +17,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     if (!token) {
-      navigate('/login');
+      navigate('/');
     }
   }, [token, navigate]);
 
