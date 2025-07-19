@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeftIcon, MagnifyingGlassIcon, PhotoIcon } from '@heroicons/react/24/solid';
-import { useNavigate, useParams } from 'react-router-dom';
-
-interface Gravestone {
-  id: string;
-  name: string;
-  lastname: string;
-  cemetery: string;
-  dateOfDeath: string;
-  imageUrl: string;
-}
+import { MagnifyingGlassIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import { useParams } from 'react-router-dom';
+import { Gravestone } from '../interfaces/gravestone.interface';
 
 const SearchGravestones: React.FC = () => {
   const [name, setName] = useState('');
@@ -19,6 +11,7 @@ const SearchGravestones: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { cemeteryId } = useParams<{ cemeteryId: string }>();
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +19,7 @@ const SearchGravestones: React.FC = () => {
     setNoResults(false);
 
     try {
-      const response = await fetch(`http://localhost:3000/gravestones/search?name=${name || ''}&lastname=${lastname || ''}&cemeteryId=${cemeteryId}`);
+      const response = await fetch(`${baseUrl}gravestones/search?name=${name || ''}&lastname=${lastname || ''}&cemeteryId=${cemeteryId}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -95,12 +88,17 @@ const SearchGravestones: React.FC = () => {
                 <td className="px-4 py-2">{gravestone.lastname}</td>
                 <td className="px-4 py-2">{new Date(gravestone.dateOfDeath).toLocaleDateString()}</td>
                 <td className="px-4 py-2">
-                  <a href={gravestone.imageUrl} target="_blank" rel="noopener noreferrer" className="flex items-center text-primary hover:text-green-700">
+                  <a href={gravestone.url} target="_blank" rel="noopener noreferrer" className="flex items-center text-primary hover:text-green-700 hover:underline transition-colors duration-200 cursor-pointer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(gravestone.url, '_blank', 'noopener noreferrer');
+                    }}
+                  >
                     <PhotoIcon className="w-5 h-5 mr-2" />
                     Ver imagen
                   </a>
                 </td>
-                <td hidden className="px-4 py-2">{gravestone.cemetery}</td>
+                <td hidden className="px-4 py-2">{gravestone.cemetery.id}</td>
               </tr>
             ))}
           </tbody>

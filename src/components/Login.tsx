@@ -1,19 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import FormInput from "./FormInput"; // Asegúrate de que este componente esté creado correctamente
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setToken } = useContext(AuthContext)!;
+
+  const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${baseUrl}auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,10 +29,11 @@ const Login: React.FC = () => {
         const data = await response.json();
         const token = data.access_token;
         localStorage.setItem("token", token);
+        setToken(token);
 
         navigate("/cemeteries", { replace: true });
       } else {
-        setError("Credenciales inválidas");
+        setError("Correo o contraseña incorrectos");
       }
     } catch (err) {
       setError("Hubo un error, inténtalo de nuevo");
@@ -68,6 +73,14 @@ const Login: React.FC = () => {
                 className="text-primary hover:text-green-700 transition-all duration-200"
               >
                 Crear cuenta
+              </Link>
+            </div>
+            <div className="text-center mt-4">
+              <Link
+                to="/recover-password"
+                className="text-primary hover:text-green-700 transition-all duration-200"
+              >
+                Recuperar contraseña
               </Link>
             </div>
           </div>

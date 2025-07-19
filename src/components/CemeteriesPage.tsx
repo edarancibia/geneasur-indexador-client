@@ -7,6 +7,8 @@ const CemeteriesPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
   const fetchCemeteries = async () => {
     try {
       const accessToken = localStorage.getItem('token');
@@ -16,7 +18,7 @@ const CemeteriesPage: React.FC = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:3000/cemeteries/all', {
+      const response = await fetch(`${baseUrl}cemeteries/all`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -59,11 +61,11 @@ const CemeteriesPage: React.FC = () => {
               className="p-4 m-4 bg-white shadow-md rounded-lg cursor-pointer hover:bg-gray-100"
               onClick={() => handleCemeteryClick(cemetery)}
             >
-              <h2 className="text-xl font-bold">{cemetery.name}</h2>
+              <h2 className="text-xl font-bold">{cemetery.name} - {cemetery.city.name}</h2>
             </div>
           ))
         ) : (
-          <p>No cemeteries available.</p>
+          <p>Cargando cementerios...</p>
         )}
       </div>
     </div>

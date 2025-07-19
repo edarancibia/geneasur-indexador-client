@@ -1,6 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import LoginForm from "./components/Login";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import Login from "./components/Login";
 import CreateGravestoneForm from "./components/CreateGravestoneForm";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
@@ -9,13 +9,17 @@ import AppLayout from "./AppLayout";
 import SelectAction from "./components/SelectAction";
 import SearchGravestones from "./components/SearchGravestone";
 import Register from "./components/UserRegister";
+import PendingUsersApproval from "./components/pendingUserApprovals";
+import AdminRoute from "./components/AdminRoute";
 
 const App: React.FC = () => {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="user-register" element={<Register />} />
+          <Route path="/" element={<Navigate to="/login" />} />
           {/* Rutas que usan el AppLayout */}
           <Route element={<AppLayout />}>
             <Route
@@ -29,7 +33,12 @@ const App: React.FC = () => {
             <Route path="/cemeteries" element={<CemeteriesPage />} />
             <Route path="/select-action/:cemeteryId" element={<SelectAction />} />
             <Route path="/search-gravestones/:cemeteryId" element={<SearchGravestones />} />
-            <Route path="user-register" element={<Register />} />
+            {/* <Route path="/approvals" element={<PendingUsersApproval />} /> */}
+            <Route path="/approvals" element={
+              <AdminRoute>
+                <PendingUsersApproval />
+              </AdminRoute>
+            } />
           </Route>
         </Routes>
       </AuthProvider>

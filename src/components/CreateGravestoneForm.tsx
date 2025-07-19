@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Gravestone } from '../interfaces/createGravestone.interface';
 import { Cemetery } from '../interfaces/cemetery.interface';
 import { useParams } from 'react-router-dom';
@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 const CreateGravestoneForm: React.FC = () => {
   const { cemeteryId } = useParams<{ cemeteryId: string }>();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   
   const [gravestone, setGravestone] = useState<Gravestone>({
     cemetery: '',
@@ -18,28 +20,6 @@ const CreateGravestoneForm: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cemetery, setCemetery] = useState<Cemetery | null>(null);
-
-  const fetchCemetery = async (cemeteryId: string) => {
-    try {
-      const response = await fetch(`http://localhost:3000/cemeteries/get/${cemeteryId}`);
-
-      if (response.ok) {
-        const data = await response.json();
-
-        setCemetery(data);
-      } else {
-        setError('Failed to fetch cemetery');
-      }
-    } catch (err) {
-      setError('Something went wrong while fetching cemetery');
-    }
-  };
-
-  useEffect(() => {
-    if (cemeteryId) {
-      fetchCemetery(cemeteryId);
-    }
-  }, [cemeteryId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -80,17 +60,17 @@ const CreateGravestoneForm: React.FC = () => {
       }
 
     const formData = new FormData();
-    formData.append('cemetery', cemeteryId!);
+    formData.append('cemeteryId', cemeteryId!);
     formData.append('name', gravestone.name);
     formData.append('lastname', gravestone.lastname);
     formData.append('dateOfDeath', gravestone.dateOfDeath.toISOString());
     
     if (imageFile) {
-      formData.append('file', imageFile);
+      formData.append('image', imageFile);
     }
 
     try {
-      const response = await fetch('http://localhost:3000/gravestones', {
+      const response = await fetch(`${baseUrl}gravestones`, {
         method: 'POST',
         body: formData,
         headers: {
@@ -102,7 +82,7 @@ const CreateGravestoneForm: React.FC = () => {
         throw new Error('Failed to create gravestone');
       }
 
-      alert('Gravestone created successfully!');
+      alert('Lápida indexada correctamente!');
       setGravestone({
         cemetery: '',
         name: '',
@@ -114,9 +94,10 @@ const CreateGravestoneForm: React.FC = () => {
       setImageFile(null);
 
       if (imageInputRef.current) {
-        imageInputRef.current.value = ''; // Limpia el input de tipo file
+        imageInputRef.current.value = '';
       }
     } catch (err) {
+      console.log(err);
       setError('Something went wrong. Please try again.');
     }
   };
