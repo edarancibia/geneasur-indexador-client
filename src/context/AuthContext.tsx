@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const publicPaths = ['/login', '/user-register'];
+    const publicPaths = ['/login', '/user-register', '/forgot-password', '/reset-password'];
 
     if (!token && !publicPaths.includes(location.pathname)) {
       navigate('/');

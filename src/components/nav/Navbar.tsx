@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserIcon } from "@heroicons/react/24/solid";
+import { UserIcon } from 'lucide-react';
 import NotificationsBell from './NotificationsBell';
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -15,8 +17,28 @@ const Navbar: React.FC = () => {
   };
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    setMenuOpen((prev) => !prev);
   };
+
+  // Detectar clic fuera del menú
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-primary text-white py-4 shadow-md">
@@ -37,13 +59,15 @@ const Navbar: React.FC = () => {
         <div className="flex items-center gap-4 relative">
           <NotificationsBell />
 
-          <button onClick={toggleMenu} className="focus:outline-none">
+          <button ref={buttonRef} onClick={toggleMenu} className="focus:outline-none">
             <UserIcon className="h-8 w-8" />
           </button>
 
-          {/* Menú desplegable */}
           {menuOpen && (
-            <div className="absolute right-0 mt-12 w-48 bg-white text-black rounded-lg shadow-lg z-50">
+            <div
+              ref={menuRef}
+              className="absolute right-0 mt-12 w-48 bg-white text-black rounded-lg shadow-lg z-50"
+            >
               <ul className="py-2">
                 <li className="px-4 py-2 hover:bg-gray-200">
                   <Link to="/user-details">Datos de Usuario</Link>
@@ -61,3 +85,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+

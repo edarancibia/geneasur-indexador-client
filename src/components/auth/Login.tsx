@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import FormInput from "./FormInput"; // Asegúrate de que este componente esté creado correctamente
+import FormInput from "../FormInput"; // Asegúrate de que este componente esté creado correctamente
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -77,7 +77,7 @@ const Login: React.FC = () => {
             </div>
             <div className="text-center mt-4">
               <Link
-                to="/recover-password"
+                to="/forgot-password"
                 className="text-primary hover:text-green-700 transition-all duration-200"
               >
                 Recuperar contraseña

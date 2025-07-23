@@ -12,7 +12,7 @@ type User = {
 const PendingUsersApproval: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [,setError] = useState<string | null>(null);
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const { user } = useContext(AuthContext)!;

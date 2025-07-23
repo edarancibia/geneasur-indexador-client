@@ -44,27 +44,27 @@ export default function NotificationsBell() {
       }
     };
   
-    const markAllAsRead = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const res = await fetch('/api/notifications/mark-read', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    // const markAllAsRead = async () => { TODO: implement API
+    //   try {
+    //     const token = localStorage.getItem('token');
+    //     const res = await fetch('/api/notifications/mark-read', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     });
   
-        if (!res.ok) throw new Error('Error marking notifications as read');
+    //     if (!res.ok) throw new Error('Error marking notifications as read');
   
-        // 🆗 Marcamos todas las notificaciones como leídas en el estado local
-        setNotifications(prev =>
-          prev.map(n => ({ ...n, read: true }))
-        );
-      } catch (error) {
-        console.error('Error marking notifications as read:', error);
-      }
-    };
+    //     // 🆗 Marcamos todas las notificaciones como leídas en el estado local
+    //     setNotifications(prev =>
+    //       prev.map(n => ({ ...n, read: true }))
+    //     );
+    //   } catch (error) {
+    //     console.error('Error marking notifications as read:', error);
+    //   }
+    // };
   
     const handleBellClick = () => {
       setShowDropdown(!showDropdown);

@@ -1,14 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { Gravestone } from '../interfaces/createGravestone.interface';
 import { Cemetery } from '../interfaces/cemetery.interface';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const CreateGravestoneForm: React.FC = () => {
   const { cemeteryId } = useParams<{ cemeteryId: string }>();
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
-  
+
   const [gravestone, setGravestone] = useState<Gravestone>({
     cemetery: '',
     name: '',
@@ -19,19 +19,19 @@ const CreateGravestoneForm: React.FC = () => {
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [cemetery, setCemetery] = useState<Cemetery | null>(null);
+  const [cemetery] = useState<Cemetery | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
     if (name === 'name' || name === 'lastname') {
-        // Verifica que solo se ingresen letras y espacios
-        const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
-        if (!nameRegex.test(value)) {
-          //setError(`El campo ${name === 'name' ? 'Nombre' : 'Apellido'} no puede contener números ni caracteres especiales.`);
-          return;
-        }
+      // Verifica que solo se ingresen letras y espacios
+      const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/;
+      if (!nameRegex.test(value)) {
+        //setError(`El campo ${name === 'name' ? 'Nombre' : 'Apellido'} no puede contener números ni caracteres especiales.`);
+        return;
       }
+    }
 
     setGravestone({ ...gravestone, [name]: value });
   };
@@ -55,16 +55,16 @@ const CreateGravestoneForm: React.FC = () => {
     const accessToken = localStorage.getItem('token');
 
     if (!accessToken) {
-        setError('Authentication token not found. Please login again.');
-        return;
-      }
+      setError('Authentication token not found. Please login again.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('cemeteryId', cemeteryId!);
     formData.append('name', gravestone.name);
     formData.append('lastname', gravestone.lastname);
     formData.append('dateOfDeath', gravestone.dateOfDeath.toISOString());
-    
+
     if (imageFile) {
       formData.append('image', imageFile);
     }
@@ -74,8 +74,8 @@ const CreateGravestoneForm: React.FC = () => {
         method: 'POST',
         body: formData,
         headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (!response.ok) {
@@ -168,6 +168,12 @@ const CreateGravestoneForm: React.FC = () => {
         >
           Guardar
         </button>
+        <Link
+          to="/cemeteries"
+          className="block text-center w-full bg-primary text-white py-2 rounded-md hover:bg-green-700 transition-all duration-200 mt-2"
+        >
+          Volver
+        </Link>
       </form>
     </div>
   );
