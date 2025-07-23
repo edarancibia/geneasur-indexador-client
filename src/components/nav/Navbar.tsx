@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
         {/* Logo e Inicio */}
         <div className="flex items-center space-x-4">
           <img
-            src="/src/static/logo-geneasur.jpg"
+            src="/static/logo-geneasur.jpg"
             alt="Logo"
             className="w-12 h-12 object-cover rounded-full border-2 border-white"
           />
