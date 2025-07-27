@@ -43,11 +43,16 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-primary via-green-300 to-green-100">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+        <img
+          src="/static/logo-geneasur.jpg"
+          alt="Logo"
+          className="w-28 h-28 mx-auto rounded-full object-cover"
+        />
+        <h2 className="text-center text-2xl font-extrabold text-gray-900 mt-5">
           Iniciar Sesión
         </h2>
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-5 space-y-6" onSubmit={handleSubmit}>
           <FormInput
             label="Email"
             type="email"

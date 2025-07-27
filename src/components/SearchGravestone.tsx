@@ -28,16 +28,16 @@ const SearchGravestones: React.FC = () => {
           setNoResults(true);
         }
       } else {
-        throw new Error('Error al buscar las lápidas');
+        throw new Error('Error al buscar las sepulturas');
       }
     } catch (err) {
-      setError('Ocurrió un error al buscar las lápidas');
+      setError('Ocurrió un error al buscar las sepulturas');
     }
   };
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold text-center mb-6">Buscar Lápidas</h2>
+      <h2 className="text-2xl font-semibold text-center mb-6">Buscar Sepulturas</h2>
 
       <form onSubmit={handleSearch} className="flex flex-col items-center space-y-4 mb-6">
         <input
