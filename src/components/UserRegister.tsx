@@ -14,6 +14,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  const enabledUserRestriction = import.meta.env.VITE_ALLOW_USER_CREATION === 'true';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,9 +74,12 @@ const Register: React.FC = () => {
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-6">
       {showSuccess && (
         <div className="fixed top-4 w-11/12 max-w-md bg-green-600 text-white text-center py-2 px-4 rounded-lg shadow-md">
-          Registro exitoso! Debes esperar que un administrador te acepte.
+          {enabledUserRestriction
+            ? 'Registro exitoso! Debes esperar que un administrador te acepte.'
+            : 'Registro exitoso!'}
         </div>
       )}
+
 
       {error && (
         <div className="fixed top-4 w-11/12 max-w-md bg-red-600 text-white text-center py-2 px-4 rounded-lg shadow-md">
