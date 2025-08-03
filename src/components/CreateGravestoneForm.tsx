@@ -38,7 +38,15 @@ const CreateGravestoneForm: React.FC = () => {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setGravestone({ ...gravestone, dateOfDeath: new Date(value) });
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+      setError('Fecha inválida. Por favor, seleccione una fecha válida.');
+      return;
+    }
+
+    setError(null);
+    setGravestone({ ...gravestone, dateOfDeath: date });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +90,7 @@ const CreateGravestoneForm: React.FC = () => {
         throw new Error('Failed to create gravestone');
       }
 
-      alert('Lápida indexada correctamente!');
+      alert('Sepultura indexada correctamente!');
       setGravestone({
         cemetery: '',
         name: '',
@@ -106,7 +114,7 @@ const CreateGravestoneForm: React.FC = () => {
     <div>
       <h2 className="text-3xl font-semibold text-center text-gray-800 mt-8 mb-4">{cemetery?.name}</h2>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md mt-3">
-        <h2 className="text-2xl font-bold mb-6 text-center">Crear Lápida</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Crear Sepultura</h2>
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
